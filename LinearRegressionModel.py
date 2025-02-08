@@ -13,10 +13,10 @@ house  = fetch_california_housing()
 df = pd.DataFrame(house.data, columns=house.feature_names)
 df["Price"] = house.target
 print(df.head())
-print (df.size)
+#print (df.size)
 #print(df.info())
 #print(df.describe())1
-print(df.sort_values(by="Price", ascending=False).head(990))
+#print(df.sort_values(by="Price", ascending=False).head(990))
 #print(df.isnull().sum())
 
 sns.histplot(df['Price'], bins=80, kde=True)
@@ -36,4 +36,23 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2,random_s
 scaler = StandardScaler()
 x_train_scaled = scaler.fit_transform(x_train)
 x_test_scaled = scaler.transform(x_test)
+
+model = LinearRegression()
+model.fit(x_train_scaled, y_train)
+
+y_pred = model.predict(x_test_scaled)
+
+mae = mean_absolute_error(y_test, y_pred)
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+
+print(f"Mean Absolute Error (MAE): {mae:.2f}")
+print(f"Root Mean Squared Error (RMSE): {rmse:.2f}")
+
+plt.figure(figsize=(8, 8))
+plt.scatter(y_test, y_pred, alpha=0.5)
+plt.xlabel("Actual Prices")
+plt.ylabel("Predicted Prices")
+plt.title("Actual vs Predicted House Prices")
+plt.show()
 
